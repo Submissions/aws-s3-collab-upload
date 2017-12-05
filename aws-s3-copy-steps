@@ -1,0 +1,24 @@
+######## For uploading into a collaborator's S3 bucket ########
+
+### create a python environment and install the aws command line interface (awscli)
+
+cd /abcd_software/
+conda create -p aws python
+. activate ./aws
+ pip install awscli
+
+
+### Collaborator will provide a username/password, access key, secret access key, console login link, region 
+
+aws configure
+
+
+### Copying files to the s3 bucket
+
+aws s3 cp /tmp/foo/ s3://bucket/ --sse AES256
+### Note: --sse (string) specifies server-side encryption of the object in S3
+
+
+#### Example command used in daily operations
+
+cat file_a | while read line; do file_name=`echo "$line" | cut -f1`; file_path=`echo "$line" | cut -f2`; aws s3 cp $file_path s3://seq-data/x01/batch_25/$file_name --sse AES256; done;
